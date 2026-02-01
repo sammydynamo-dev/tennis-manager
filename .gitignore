@@ -15,9 +15,15 @@
 .kiro/
 lancedb/
 
-# Java
+# Test Results and Reports
+TEST-*.xml
+*.test
+test-output/
+test-results/
+junit-*.properties
+
+# Java Compiled Files
 *.class
-*.jar
 *.war
 *.ear
 *.log
@@ -26,9 +32,12 @@ lancedb/
 hs_err_pid*
 replay_pid*
 
-# Package Files
+# JAR Files (ignore all except required dependencies)
 *.jar
+# Keep required dependencies
 !mysql-connector-j-*.jar
+!junit-platform-console-standalone-*.jar
+!jqwik-*.jar
 
 # Build directories
 bin/
@@ -39,6 +48,11 @@ dist/
 
 # Database Configuration (IMPORTANT: Never commit credentials!)
 config.properties
+config.properties.backup
+*.properties.local
+
+# jqwik Property-Based Testing
+.jqwik-database
 
 # macOS
 .DS_Store

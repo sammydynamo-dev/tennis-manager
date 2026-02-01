@@ -1,0 +1,33 @@
+# Tennis League Management System - Database Configuration Template
+# 
+# INSTRUCTIONS:
+# 1. Copy this file to 'config.properties' in the project root
+# 2. Replace the placeholder values with your actual database credentials
+# 3. NEVER commit config.properties to version control!
+#
+# Example:
+#   cp config.properties.example config.properties
+#   # Then edit config.properties with your credentials
+
+# Database Connection URL
+# Format: jdbc:mysql://hostname:port/database_name
+# Default MySQL port is 3306
+db.url=jdbc:mysql://localhost:3306/TennisLeague
+
+# Database Username
+# Replace 'your_username' with your MySQL username
+db.user=your_username
+
+# Database Password
+# Replace 'your_password' with your MySQL password
+db.password=your_password
+
+# Optional: Connection Pool Settings (for future use)
+# db.pool.minSize=5
+# db.pool.maxSize=20
+# db.pool.timeout=30000
+
+# Optional: SSL Settings (for production)
+# db.ssl.enabled=false
+# db.ssl.trustStore=/path/to/truststore
+# db.ssl.trustStorePassword=password

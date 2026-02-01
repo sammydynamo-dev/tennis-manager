@@ -44,7 +44,17 @@ com.tennisleague/
 - **Language**: Java 24
 - **Database**: MySQL 9.3.0
 - **JDBC Driver**: MySQL Connector/J 9.1.0
-- **Testing**: JUnit 5 + jqwik (property-based testing)
+- **Testing Framework**: JUnit 5 (Platform Console Standalone 1.10.1)
+- **Property-Based Testing**: jqwik 1.9.2
+
+### Required JAR Files
+
+All JAR files are included in the repository:
+
+1. `mysql-connector-j-9.1.0.jar` - MySQL JDBC driver
+2. `junit-platform-console-standalone-1.10.1.jar` - JUnit 5 test runner
+3. `jqwik-api-1.9.2.jar` - jqwik property-based testing API
+4. `jqwik-engine-1.9.2.jar` - jqwik property-based testing engine
 
 ## 📋 Prerequisites
 
@@ -52,16 +62,34 @@ com.tennisleague/
 - MySQL 9.3.0 or higher
 - MySQL Connector/J 9.1.0 (included in repository)
 
-## 🚀 Setup Instructions
+## 🚀 Quick Start
 
-### 1. Database Setup
+### Using Helper Scripts (Recommended)
+
+**Unix/Linux/macOS:**
+```bash
+./compile.sh    # Compile all source and test files
+./run.sh        # Run the application
+./test.sh       # Run all tests
+```
+
+**Windows:**
+```cmd
+compile.bat     # Compile all source and test files
+run.bat         # Run the application
+test.bat        # Run all tests
+```
+
+### Manual Setup
+
+#### 1. Database Setup
 
 ```bash
 # Create and populate the database
 mysql -u your_username -p < seed-data.sql
 ```
 
-### 2. Configuration
+#### 2. Configuration
 
 Create a `config.properties` file in the project root:
 
@@ -73,16 +101,28 @@ db.password=your_password
 
 **Important**: Never commit `config.properties` to version control!
 
-### 3. Compilation
+#### 3. Compilation
 
+**Unix/Linux/macOS:**
 ```bash
-javac -cp .:mysql-connector-j-9.1.0.jar com/tennisleague/**/*.java
+javac -cp .:mysql-connector-j-9.1.0.jar:jqwik-api-1.9.2.jar:jqwik-engine-1.9.2.jar:junit-platform-console-standalone-1.10.1.jar com/tennisleague/**/*.java test/com/tennisleague/**/*.java
 ```
 
-### 4. Running the Application
+**Windows:**
+```cmd
+javac -cp .;mysql-connector-j-9.1.0.jar;jqwik-api-1.9.2.jar;jqwik-engine-1.9.2.jar;junit-platform-console-standalone-1.10.1.jar com\tennisleague\**\*.java test\com\tennisleague\**\*.java
+```
 
+#### 4. Running the Application
+
+**Unix/Linux/macOS:**
 ```bash
 java -cp .:mysql-connector-j-9.1.0.jar com.tennisleague.TennisLeagueApp
+```
+
+**Windows:**
+```cmd
+java -cp .;mysql-connector-j-9.1.0.jar com.tennisleague.TennisLeagueApp
 ```
 
 ## 📊 Database Schema
@@ -107,26 +147,76 @@ Coach (1) ──────< (N) WorkExperience
 
 ## 📖 Documentation
 
-Detailed documentation is available in the `.kiro/specs/tennis-league-management-system/` directory:
+Comprehensive documentation is available:
 
-- **requirements.md**: Complete requirements with acceptance criteria
-- **design.md**: System architecture and design decisions
-- **tasks.md**: Implementation plan with task breakdown
+- **[USER_GUIDE.md](USER_GUIDE.md)**: Complete user guide for end users (3-5 pages)
+  - How to use all features
+  - Step-by-step instructions with examples
+  - Common workflows and troubleshooting
+  
+- **[README.md](README.md)**: Project overview and quick start (this file)
+  - Architecture and technology stack
+  - Setup and installation
+  - Testing information
+
+- **[SETUP.md](SETUP.md)**: Detailed setup and configuration guide
+  - Manual compilation and execution
+  - Troubleshooting common issues
+  - Classpath configuration
+
+- **Technical Specifications** (`.kiro/specs/tennis-league-management-system/`):
+  - `requirements.md`: Complete requirements with acceptance criteria
+  - `design.md`: System architecture and design decisions
+  - `tasks.md`: Implementation plan with task breakdown
 
 ## 🧪 Testing
 
-The project includes both unit tests and property-based tests:
+The project includes comprehensive testing with 103 tests (all passing):
 
+- **86 Unit Tests**: Specific examples and edge cases
+- **17 Property-Based Tests**: Universal properties validated across 100+ iterations each
+
+### Running Tests
+
+**Using Helper Script (Recommended):**
+
+Unix/Linux/macOS:
 ```bash
-# Run all tests (command depends on build tool setup)
-# Details to be added after test implementation
+./test.sh
 ```
+
+Windows:
+```cmd
+test.bat
+```
+
+**Manual Execution:**
+
+Unix/Linux/macOS:
+```bash
+java -jar junit-platform-console-standalone-1.10.1.jar \
+    --class-path .:test:mysql-connector-j-9.1.0.jar:jqwik-api-1.9.2.jar:jqwik-engine-1.9.2.jar \
+    --scan-class-path \
+    --include-classname ".*Test"
+```
+
+Windows:
+```cmd
+java -jar junit-platform-console-standalone-1.10.1.jar --class-path .;test;mysql-connector-j-9.1.0.jar;jqwik-api-1.9.2.jar;jqwik-engine-1.9.2.jar --scan-class-path --include-classname ".*Test"
+```
+
+### Test Coverage
+
+✅ **17 Correctness Properties Validated:**
+- Properties 1-12: CRUD operations and associations
+- Properties 15-18: Work experience and validation
+- Property 20: Referential integrity
 
 ### Testing Strategy
 
 - **Unit Tests**: Specific examples and edge cases
-- **Property-Based Tests**: Universal properties across all inputs
-- **Integration Tests**: End-to-end workflows
+- **Property-Based Tests**: Universal properties across all inputs (100 iterations minimum)
+- **Edge Case Tests**: Boundary conditions, null handling, constraint violations
 
 ## 🎓 Academic Context
 
@@ -143,8 +233,15 @@ This project was developed as part of CSC422 coursework, demonstrating:
 - [x] Requirements gathering
 - [x] System design
 - [x] Implementation planning
-- [ ] Core implementation
-- [ ] Testing
+- [x] Core implementation (MVP complete)
+- [x] Testing (103 tests, all passing)
+- [x] Database connection management
+- [x] DAO layer implementation
+- [x] Service layer implementation
+- [x] CLI interface
+- [x] Input validation
+- [x] Error handling
+- [x] User documentation
 - [ ] Optional reporting features
 
 ## 👥 Contributors

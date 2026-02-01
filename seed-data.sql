@@ -38,7 +38,7 @@ CREATE TABLE WorkExperience (
     CoachID INT,
     ExperienceType VARCHAR(255),
     Duration INT,
-    FOREIGN KEY (CoachID) REFERENCES Coach(CoachID)
+    FOREIGN KEY (CoachID) REFERENCES Coach(CoachID) ON DELETE CASCADE
 );
 
 
