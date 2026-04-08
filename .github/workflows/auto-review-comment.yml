@@ -1,0 +1,22 @@
+name: Auto-request PR review
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches: [main]
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: '@cyrus-application review the PR diff and post review comments directly to that PR. Rules: 1) Post only review comments plus one top-level summary; 2) Do NOT change files, merge, add/remove dependencies, alter CI, or run destructive commands; 3) Mark uncertainty with "[uncertain]"; 4) Cite exact file paths and line ranges when available. Workflow: fetch the diff, run only safe local checks (lint, typechecks, tests if enabled), then analyze logic, security, style, performance, and test impact. Output contract:\n\nTop-level summary (single comment): one-line verdict (Approve / Changes Requested / Needs Human Review), counts by severity (Critical / Major / Minor / Suggestion), and up to 3 action bullets linking to the most important comments.\nFile-level comments (one thread per file when possible). For each issue post:\nSeverity: Critical | Major | Minor | Suggestion\nLocation: path/to/file#Lstart-Lend (or "[approximate] path excerpt")\nFinding: one sentence\nWhy: one sentence (risk/impact)\nEvidence: minimal diff snippet or CI/test output (if verifiable)\nRecommended fix: concise patch or steps (1-3 lines)\nConfidence: High | Medium | Low (if <High append "[uncertain]")\nFormatting rules: group related issues per file thread, label trivial autofixes "Suggestion - easy fix", avoid duplicate comments, and prefer consolidated comments for the same root cause. Stop-and-ask gates: pause and request human approval before doing any file edits, dependency changes, CI edits, merges, or destructive operations. Edge rules: do not invent test/CI outputs - mark them "[uncertain]" if not verifiable; skip deep review of generated/binary files and note why. Success criteria: all file comments plus one summary comment posted; summary includes severity counts and links to top 3 comments. If write access is missing, post one comment requesting permissions and stop.'
+            });
